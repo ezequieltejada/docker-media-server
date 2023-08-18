@@ -1,0 +1,122 @@
+version: "3.6"
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: tms-navidrome
+    ports:
+      - "${TMS_NAVI_EXTERNAL_PORT}:4533"
+    restart: unless-stopped
+    environment:
+      ND_SCANSCHEDULE: 1h
+      ND_LOGLEVEL: info  
+      ND_SESSIONTIMEOUT: 24h
+    volumes:
+      - "${TMS_NAVI_DATA}:/data"
+      - "${TMS_NAVI_MUSIC}:/music:ro"
+    env_file:
+      - stack.env
+    networks:
+      default:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: tms-qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+    volumes:
+      - $TMS_QBIT_CONFIG_FOLDER:/config
+      - $TMS_QBIT_DOWNLOAD_FOLDER:/downloads
+    restart: unless-stopped
+    env_file:
+      - stack.env
+    network_mode: "service:gluetun"
+  watchtower:
+    container_name: tms-watchtower
+    restart: always
+    image: v2tec/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --schedule "0 0 4 * * *" --cleanup
+  gluetun:
+    container_name: tms-gluetun
+    image: qmcgaw/gluetun:latest
+    entrypoint: /gluetun-entrypoint
+    environment:
+    - BLOCK_MALICIOUS=on
+    - DNS_ADDRESS=127.0.0.1
+    - DNS_UPDATE_PERIOD=24h
+    - DOT=on
+    - DOT_CACHING=on
+    - DOT_PRIVATE_ADDRESS=127.0.0.1/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16,::1/128,fc00::/7,fe80::/10,::ffff:7f00:1/104,::ffff:a00:0/104,::ffff:a9fe:0/112,::ffff:ac10:0/108,::ffff:c0a8:0/112
+    - DOT_PROVIDERS=cloudflare
+    - DOT_VALIDATION_LOGLEVEL=0
+    - DOT_VERBOSITY=1
+    - DOT_VERBOSITY_DETAILS=0
+    - FIREWALL=on
+    - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
+    - HEALTH_SUCCESS_WAIT_DURATION=5s
+    - HEALTH_TARGET_ADDRESS=cloudflare.com:443
+    - HEALTH_VPN_DURATION_ADDITION=5s
+    - HEALTH_VPN_DURATION_INITIAL=6s
+    - HTTP_CONTROL_SERVER_ADDRESS=:8000
+    - HTTP_CONTROL_SERVER_LOG=on
+    - HTTPPROXY_LISTENING_ADDRESS=:8888
+    - HTTPPROXY_PASSWORD_SECRETFILE=/run/secrets/httpproxy_password
+    - HTTPPROXY_USER_SECRETFILE=/run/secrets/httpproxy_user
+    - LOG_LEVEL=info
+    - OPENVPN_CLIENTCRT_SECRETFILE=/run/secrets/openvpn_clientcrt
+    - OPENVPN_CLIENTKEY_SECRETFILE=/run/secrets/openvpn_clientkey
+    - OPENVPN_ENCRYPTED_KEY_SECRETFILE=/run/secrets/openvpn_encrypted_key
+    - OPENVPN_KEY_PASSPHRASE_SECRETFILE=/run/secrets/openvpn_key_passphrase
+    - OPENVPN_PASSWORD=$TMS_GLUETUN_OPENVPN_PASSWORD
+    - OPENVPN_PASSWORD_SECRETFILE=/run/secrets/openvpn_password
+    - OPENVPN_PROCESS_USER=root
+    - OPENVPN_PROTOCOL=udp
+    - OPENVPN_USER=$TMS_GLUETUN_OPENVPN_USER
+    - OPENVPN_USER_SECRETFILE=/run/secrets/openvpn_user
+    - OPENVPN_VERBOSITY=1
+    - OPENVPN_VERSION=2.5
+    - OWNED_ONLY=no
+    - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    - PPROF_BLOCK_PROFILE_RATE=0
+    - PPROF_ENABLED=no
+    - PPROF_HTTP_SERVER_ADDRESS=:6060
+    - PPROF_MUTEX_PROFILE_RATE=0
+    - PUBLICIP_FILE=/tmp/gluetun/ip
+    - PUBLICIP_PERIOD=12h
+    - SERVER_REGIONS=$TMS_GLUETUN_COUNTRY
+    - SHADOWSOCKS=off
+    - SHADOWSOCKS_CIPHER=chacha20-ietf-poly1305
+    - SHADOWSOCKS_LISTENING_ADDRESS=:8388
+    - SHADOWSOCKS_PASSWORD_SECRETFILE=/run/secrets/shadowsocks_password
+    - UPDATER_MIN_RATIO=0.8
+    - UPDATER_PERIOD=0
+    - VERSION_INFORMATION=on
+    - VPN_INTERFACE=tun0
+    - VPN_PORT_FORWARDING=off
+    - VPN_PORT_FORWARDING_STATUS_FILE=/tmp/gluetun/forwarded_port
+    - VPN_SERVICE_PROVIDER=$TMS_GLUETUN_PROVIDER
+    - VPN_TYPE=openvpn
+    - WIREGUARD_IMPLEMENTATION=auto
+    - WIREGUARD_MTU=1400
+    ports:
+      - "6881:6881/tcp"
+      - "6881:6881/udp"
+      - "7681:7681/tcp"
+      - "8000:8000/tcp"
+      - "8080:8080/tcp"
+      - "8388:8388/tcp"
+      - "8388:8388/udp"
+      - "8888:8888/tcp"
+    volumes:
+      - "${TMS_GLUETUN_CONFIG}:/gluetun"
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      - stack.env
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    networks:
+      default:
