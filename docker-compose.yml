@@ -28,6 +28,8 @@ services:
     volumes:
       - $TMS_QBIT_CONFIG_FOLDER:/config
       - $TMS_QBIT_DOWNLOAD_FOLDER:/downloads
+      - $TMS_QBIT_DOWNLOAD_MOVIES:/movies
+      - $TMS_QBIT_DOWNLOAD_TV:/tv
     restart: unless-stopped
     env_file:
       - stack.env
