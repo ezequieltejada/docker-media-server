@@ -142,3 +142,16 @@ services:
     restart: unless-stopped
     env_file:
       - stack.env
+  headphones:
+    image: lscr.io/linuxserver/headphones:latest
+    container_name: tms-headphones
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /volume1/docker/headphones/config:/config
+      - /volume1/docker/headphones/downloads:/downloads
+      - /volume1/homes/etejada/music:/music
+    network_mode: "service:gluetun"
+    restart: unless-stopped
