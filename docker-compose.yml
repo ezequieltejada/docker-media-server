@@ -130,7 +130,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
     volumes:
       - $TMS_JELLYFIN_CONFIG:/config
       - $TMS_JELLYFIN_TV:/data/tvshows
