@@ -30,7 +30,7 @@ services:
       - $TMS_QBIT_DOWNLOAD_FOLDER:/downloads
       - $TMS_QBIT_DOWNLOAD_MOVIES:/movies
       - $TMS_QBIT_DOWNLOAD_TV:/tv
-    restart: unless-stopped
+    restart: always
     env_file:
       - stack.env
     network_mode: "service:gluetun"
