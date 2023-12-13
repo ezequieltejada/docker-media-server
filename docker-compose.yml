@@ -20,6 +20,8 @@ services:
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: tms-qbittorrent
+    depends_on:
+      - gluetun
     environment:
       - PUID=1026
       - PGID=100
