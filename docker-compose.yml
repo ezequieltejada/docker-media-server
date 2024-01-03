@@ -17,11 +17,20 @@ services:
       - stack.env
     networks:
       default:
+  squid:
+    image: sameersbn/squid:3.5.27-2
+    ports:
+      - "3128:3128"
+    volumes:
+      - "${TMS_SQUID_DATA}:/var/spool/squid"
+    restart: always
+    network_mode: "service:gluetun"
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: tms-qbittorrent
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=1026
       - PGID=100
@@ -114,6 +123,8 @@ services:
       - "8388:8388/tcp"
       - "8388:8388/udp"
       - "8888:8888/tcp"
+      - "3128:3128/udp"
+      - "3128:3128/tcp"
     volumes:
       - "${TMS_GLUETUN_CONFIG}:/gluetun"
     cap_add:
