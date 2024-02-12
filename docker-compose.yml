@@ -36,7 +36,7 @@ services:
     env_file:
       - stack.env
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
+      com.centurylinklabs.watchtower.enable: "false"
     network_mode: "service:gluetun"
   watchtower:
     container_name: tms-watchtower
