@@ -118,6 +118,7 @@ services:
       - "8888:8888/tcp"
       - "3128:3128/udp"
       - "3128:3128/tcp"
+    restart: unless-stopped
     volumes:
       - "${TMS_GLUETUN_CONFIG}:/gluetun"
     cap_add:
