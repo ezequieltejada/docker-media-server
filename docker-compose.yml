@@ -38,6 +38,8 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "false"
     network_mode: "service:gluetun"
+    networks:
+      - gluetun_network
   watchtower:
     container_name: tms-watchtower
     restart: always
@@ -128,7 +130,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     networks:
-      default:
+      - gluetun_network
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: tms-jellyfin
@@ -147,3 +149,6 @@ services:
     restart: unless-stopped
     env_file:
       - stack.env
+networks:
+  gluetun_network:
+    driver: bridge
