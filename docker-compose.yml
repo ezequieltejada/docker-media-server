@@ -18,6 +18,7 @@ services:
     networks:
       default:
   qbittorrent:
+    container_name: tms-qbittorrent
     image: lscr.io/linuxserver/qbittorrent:latest
     depends_on:
       gluetun:
