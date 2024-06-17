@@ -38,17 +38,16 @@ services:
       - stack.env
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-    # dns:
-    #   - gluetun
-    networks:
-      - gluetun_network
-  watchtower:
-    container_name: tms-watchtower
-    restart: always
-    image: v2tec/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --schedule "0 0 4 * * *" --cleanup
+    dns:
+      - gluetun
+    network_mode: "container:gluetun"
+  # watchtower:
+  #   container_name: tms-watchtower
+  #   restart: always
+  #   image: v2tec/watchtower
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   command: --schedule "0 0 4 * * *" --cleanup
   gluetun:
     container_name: tms-gluetun
     image: qmcgaw/gluetun:latest
@@ -133,24 +132,24 @@ services:
       - /dev/net/tun:/dev/net/tun
     networks:
       - gluetun_network
-  jellyfin:
-    image: lscr.io/linuxserver/jellyfin:latest
-    container_name: tms-jellyfin
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-    volumes:
-      - $TMS_JELLYFIN_CONFIG:/config
-      - $TMS_JELLYFIN_TV:/data/tvshows
-      - $TMS_JELLYFIN_MOVIES:/data/movies
-    ports:
-      - 8096:8096
-      - 8920:8920 #optional
-      - 7359:7359/udp #optional
-    restart: unless-stopped
-    env_file:
-      - stack.env
+  # jellyfin:
+  #   image: lscr.io/linuxserver/jellyfin:latest
+  #   container_name: tms-jellyfin
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Etc/UTC
+  #   volumes:
+  #     - $TMS_JELLYFIN_CONFIG:/config
+  #     - $TMS_JELLYFIN_TV:/data/tvshows
+  #     - $TMS_JELLYFIN_MOVIES:/data/movies
+  #   ports:
+  #     - 8096:8096
+  #     - 8920:8920 #optional
+  #     - 7359:7359/udp #optional
+  #   restart: unless-stopped
+  #   env_file:
+  #     - stack.env
 networks:
   gluetun_network:
     driver: bridge
