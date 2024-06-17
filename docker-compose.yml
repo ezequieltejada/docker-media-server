@@ -154,10 +154,10 @@ services:
       - GROUP_ID=###
       - TZ=Europe/London
     volumes:
-      - "${TMS_FILEBOT_CONFIG}:/config"
-      - "${TMS_JELLYFIN_MOVIES}:/movies"
-      - "${TMS_JELLYFIN_TV}:/tvshows"
-      - "${TMS_QBIT_DOWNLOAD_FOLDER}:/storage"
+      - $TMS_FILEBOT_CONFIG:/config
+      - $TMS_JELLYFIN_MOVIES:/movies
+      - $TMS_JELLYFIN_TV:/tvshows
+      - $TMS_QBIT_DOWNLOAD_FOLDER:/storage
     restart: unless-stopped
 networks:
   gluetun_network:
