@@ -163,8 +163,6 @@ services:
       - $TMS_JELLYFIN_TV:/tvshows
       - $TMS_QBIT_DOWNLOAD_FOLDER:/storage
     restart: unless-stopped
-    ports:
-      - 5800:5800
     env_file:
       - stack.env
 networks:
