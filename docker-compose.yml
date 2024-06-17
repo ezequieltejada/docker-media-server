@@ -38,8 +38,6 @@ services:
       - stack.env
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-    dns:
-      - gluetun
     network_mode: "container:gluetun"
   # watchtower:
   #   container_name: tms-watchtower
