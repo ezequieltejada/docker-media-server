@@ -113,7 +113,8 @@ services:
       - "8888:8888/tcp"
       - "3128:3128/udp"
       - "3128:3128/tcp"
-      - "5800:5800" # Filebot
+      - "5800:5800/tcp" # Filebot
+      - "5800:5800/udp" # Filebot
     restart: unless-stopped
     volumes:
       - "${TMS_GLUETUN_CONFIG}:/gluetun"
