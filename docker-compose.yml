@@ -106,13 +106,14 @@ services:
       - "6881:6881/tcp"
       - "6881:6881/udp"
       - "7681:7681/tcp"
-      - "8000:8000/tcp"
-      - "8080:8080/tcp"
+      - "8000:8000/tcp" 
+      - "8080:8080/tcp" # qBittorrent
       - "8388:8388/tcp"
       - "8388:8388/udp"
       - "8888:8888/tcp"
       - "3128:3128/udp"
       - "3128:3128/tcp"
+      - "5800:5800" # Filebot
     restart: unless-stopped
     volumes:
       - "${TMS_GLUETUN_CONFIG}:/gluetun"
@@ -142,6 +143,22 @@ services:
     restart: unless-stopped
     env_file:
       - stack.env
+  filebot:
+    image: jlesage/filebot:v1.0.2
+    container_name: filebot
+    network_mode: "service:gluetun"
+    environment:
+      - WIDTH=1280
+      - HEIGHT=720
+      - USER_ID=####
+      - GROUP_ID=###
+      - TZ=Europe/London
+    volumes:
+      - "${TMS_FILEBOT_CONFIG}:/config"
+      - "${TMS_JELLYFIN_MOVIES}:/movies"
+      - "${TMS_JELLYFIN_TV}:/tvshows"
+      - "${TMS_QBIT_DOWNLOAD_FOLDER}:/storage"
+    restart: unless-stopped
 networks:
   gluetun_network:
     driver: bridge
