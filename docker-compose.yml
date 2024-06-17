@@ -162,6 +162,8 @@ services:
       - $TMS_JELLYFIN_TV:/tvshows
       - $TMS_QBIT_DOWNLOAD_FOLDER:/storage
     restart: unless-stopped
+    env_file:
+      - stack.env
 networks:
   gluetun_network:
     driver: bridge
