@@ -33,19 +33,13 @@ services:
       - $TMS_QBIT_DOWNLOAD_FOLDER:/downloads
       - $TMS_QBIT_DOWNLOAD_MOVIES:/movies
       - $TMS_QBIT_DOWNLOAD_TV:/tv
+      - $TMS_QBIT_DOWNLOAD_BOOKS:/books
     restart: always
     env_file:
       - stack.env
     labels:
       com.centurylinklabs.watchtower.enable: "false"
     network_mode: "container:tms-gluetun"
-  # watchtower:
-  #   container_name: tms-watchtower
-  #   restart: always
-  #   image: v2tec/watchtower
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   command: --schedule "0 0 4 * * *" --cleanup
   gluetun:
     container_name: tms-gluetun
     image: qmcgaw/gluetun:latest
