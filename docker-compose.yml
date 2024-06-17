@@ -145,8 +145,8 @@ services:
       - stack.env
   filebot:
     image: jlesage/filebot:v1.0.2
-    container_name: filebot
-    network_mode: "service:gluetun"
+    container_name: tms-filebot
+    network_mode: "service:tms-gluetun"
     environment:
       - WIDTH=1280
       - HEIGHT=720
