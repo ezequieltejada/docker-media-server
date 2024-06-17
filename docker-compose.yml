@@ -149,7 +149,7 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
-    network_mode: "service:tms-gluetun"
+    network_mode: "container:tms-gluetun"
     environment:
       - WIDTH=1280
       - HEIGHT=720
