@@ -130,24 +130,24 @@ services:
       - /dev/net/tun:/dev/net/tun
     networks:
       - gluetun_network
-  # jellyfin:
-  #   image: lscr.io/linuxserver/jellyfin:latest
-  #   container_name: tms-jellyfin
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - TZ=Etc/UTC
-  #   volumes:
-  #     - $TMS_JELLYFIN_CONFIG:/config
-  #     - $TMS_JELLYFIN_TV:/data/tvshows
-  #     - $TMS_JELLYFIN_MOVIES:/data/movies
-  #   ports:
-  #     - 8096:8096
-  #     - 8920:8920 #optional
-  #     - 7359:7359/udp #optional
-  #   restart: unless-stopped
-  #   env_file:
-  #     - stack.env
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: tms-jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - $TMS_JELLYFIN_CONFIG:/config
+      - $TMS_JELLYFIN_TV:/data/tvshows
+      - $TMS_JELLYFIN_MOVIES:/data/movies
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+    restart: unless-stopped
+    env_file:
+      - stack.env
 networks:
   gluetun_network:
     driver: bridge
