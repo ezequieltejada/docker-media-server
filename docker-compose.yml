@@ -146,6 +146,9 @@ services:
   filebot:
     image: jlesage/filebot:v1.0.2
     container_name: tms-filebot
+    depends_on:
+      gluetun:
+        condition: service_healthy
     network_mode: "service:tms-gluetun"
     environment:
       - WIDTH=1280
