@@ -38,7 +38,7 @@ services:
       - stack.env
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-    network_mode: "container:gluetun"
+    network_mode: "container:tms-gluetun"
   # watchtower:
   #   container_name: tms-watchtower
   #   restart: always
