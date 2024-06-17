@@ -113,8 +113,8 @@ services:
       - "8888:8888/tcp"
       - "3128:3128/udp"
       - "3128:3128/tcp"
-      - "5800:5800/tcp" # Filebot
-      - "5800:5800/udp" # Filebot
+      # - "5800:5800/tcp" # Filebot
+      # - "5800:5800/udp" # Filebot
     restart: unless-stopped
     volumes:
       - "${TMS_GLUETUN_CONFIG}:/gluetun"
@@ -144,27 +144,27 @@ services:
     restart: unless-stopped
     env_file:
       - stack.env
-  filebot:
-    image: jlesage/filebot:v1.0.2
-    container_name: tms-filebot
-    depends_on:
-      gluetun:
-        condition: service_healthy
-    network_mode: "container:tms-gluetun"
-    environment:
-      - WIDTH=1280
-      - HEIGHT=720
-      - USER_ID=####
-      - GROUP_ID=###
-      - TZ=Europe/London
-    volumes:
-      - $TMS_FILEBOT_CONFIG:/config
-      - $TMS_JELLYFIN_MOVIES:/movies
-      - $TMS_JELLYFIN_TV:/tvshows
-      - $TMS_QBIT_DOWNLOAD_FOLDER:/storage
-    restart: unless-stopped
-    env_file:
-      - stack.env
+  # filebot:
+  #   image: jlesage/filebot:v1.0.2
+  #   container_name: tms-filebot
+  #   depends_on:
+  #     gluetun:
+  #       condition: service_healthy
+  #   network_mode: "container:tms-gluetun"
+  #   environment:
+  #     - WIDTH=1280
+  #     - HEIGHT=720
+  #     - USER_ID=####
+  #     - GROUP_ID=###
+  #     - TZ=Europe/London
+  #   volumes:
+  #     - $TMS_FILEBOT_CONFIG:/config
+  #     - $TMS_JELLYFIN_MOVIES:/movies
+  #     - $TMS_JELLYFIN_TV:/tvshows
+  #     - $TMS_QBIT_DOWNLOAD_FOLDER:/storage
+  #   restart: unless-stopped
+  #   env_file:
+  #     - stack.env
 networks:
   gluetun_network:
     driver: bridge
