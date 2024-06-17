@@ -38,8 +38,8 @@ services:
       - stack.env
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-    dns:
-      - gluetun
+    # dns:
+    #   - gluetun
     networks:
       - gluetun_network
   watchtower:
