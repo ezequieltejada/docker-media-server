@@ -54,12 +54,17 @@ services:
       - SERVER_REGIONS=${TMS_GLUETUN_COUNTRY}
       - SHADOWSOCKS=on
       - SHADOWSOCKS_PASSWORD=${TMS_GLUETUN_SHADOWSOCKS_PASSWORD}
+      - HTTPPROXY=on
+      - HTTPPROXY_USER=${TMS_GLUETUN_HTTP_PROXY_USER}
+      - HTTPPROXY_PASSWORD=${TMS_GLUETUN_HTTP_PROXY_PASSWORD}
       - TZ=Europe/Madrid
     cap_add:
       - NET_ADMIN
     ports:
       - 8388:8388/tcp # Shadowsocks
       - 8388:8388/udp # Shadowsocks
+      - 8888:8888/tcp # HTTP Proxy
+      - 8888:8888/udp # HTTP Proxy
       - 8080:8080/tcp # HTTP Qbittorrent
       - 6881:6881 # HTTP Qbittorrent (Torrenting port)
     volumes:
