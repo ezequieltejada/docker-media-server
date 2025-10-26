@@ -1,4 +1,3 @@
-version: "3.6"
 services:
   # Navidrome
   # Doesn't use Cloudflare Tunnel
@@ -16,7 +15,7 @@ services:
       - "${TMS_NAVI_DATA}:/data"
       - "${TMS_NAVI_MUSIC}:/music:ro"
     env_file:
-      - stack.env
+      - secrets/stack.env
     networks:
       - default
 
@@ -25,7 +24,7 @@ services:
     image: lscr.io/linuxserver/qbittorrent:latest
     depends_on:
       gluetun:
-        condition: service_started
+        condition: service_healthy
     environment:
       - PUID=1026
       - PGID=100
@@ -40,7 +39,7 @@ services:
       - ${TMS_QBIT_DOWNLOAD_BOOKS}:/books
     restart: always
     env_file:
-      - stack.env
+      - secrets/stack.env
     network_mode: "container:tms-gluetun"
 
   gluetun:
@@ -65,7 +64,7 @@ services:
       - 8388:8388/udp # Shadowsocks
       - 8888:8888/tcp # HTTP Proxy
       - 8888:8888/udp # HTTP Proxy
-      - 8080:8080/tcp # HTTP Qbittorrent
+      - 8081:8080/tcp # HTTP Qbittorrent
       - 6881:6881 # HTTP Qbittorrent (Torrenting port)
     volumes:
       - ${TMS_GLUETUN_CONFIG}:/gluetun
@@ -73,9 +72,9 @@ services:
       - /dev/net/tun:/dev/net/tun
     restart: unless-stopped
     env_file:
-      - stack.env
+      - secrets/stack.env
     networks:
-      - cloudflared
+      - cloudflared_network
   
   # Jellyfin
   # Doesn't use Cloudflare Tunnel
@@ -91,15 +90,15 @@ services:
       - $TMS_JELLYFIN_TV:/data/tvshows
       - $TMS_JELLYFIN_MOVIES:/data/movies
     ports:
-      - 8096:8096
+      - 8097:8096
       - 8920:8920 #optional
       - 7359:7359/udp #optional
     restart: unless-stopped
     env_file:
-      - stack.env
+      - secrets/stack.env
     networks:
       - default
 
 networks:
-  cloudflared:
+  cloudflared_network:
     external: true
